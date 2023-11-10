@@ -18,11 +18,12 @@ public class StartActivity : AppCompatActivity() {
 
     private var fusedLocationProviderClient: FusedLocationProviderClient? = null
 
-    private val REQUEST_CODE = 100
+    companion object{private val REQUEST_CODE = 100}
+
 
     override fun onCreate(savedInstanceState: Bundle?, persistentState: PersistableBundle?) {
         super.onCreate(savedInstanceState, persistentState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.activity_start)
 
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
 
@@ -51,8 +52,8 @@ public class StartActivity : AppCompatActivity() {
             ) == PackageManager.PERMISSION_GRANTED
         ) {
             // Permission Granted - Get location from device
-            fusedLocationProviderClient.getCurrentLocation(Priority.PRIORITY_HIGH_ACCURACY,null)
-                .addOnSuccessListener(OnSuccessListener<Location> { location ->
+            fusedLocationProviderClient?.getCurrentLocation(Priority.PRIORITY_HIGH_ACCURACY,null)
+                ?.addOnSuccessListener(OnSuccessListener<Location> { location ->
                     val latitude = location.latitude
                     val longitude = location.longitude
                     val intent = Intent(this@StartActivity, MainActivity::class.java)
