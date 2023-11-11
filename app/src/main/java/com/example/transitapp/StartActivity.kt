@@ -6,6 +6,7 @@ import android.content.pm.PackageManager
 import android.location.Location
 import android.os.Bundle
 import android.os.PersistableBundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -24,7 +25,7 @@ public class StartActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?, persistentState: PersistableBundle?) {
         super.onCreate(savedInstanceState, persistentState)
         setContentView(R.layout.activity_start)
-
+        Log.d("My App", "StartActivity created")
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
 
         getLocation()
@@ -52,6 +53,7 @@ public class StartActivity : AppCompatActivity() {
             ) == PackageManager.PERMISSION_GRANTED
         ) {
             // Permission Granted - Get location from device
+            Log.i("TESTING", "Permission granted!!")
             fusedLocationProviderClient?.getCurrentLocation(Priority.PRIORITY_HIGH_ACCURACY,null)
                 ?.addOnSuccessListener(OnSuccessListener<Location> { location ->
                     val latitude = location.latitude
