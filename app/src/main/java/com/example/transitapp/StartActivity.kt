@@ -22,8 +22,8 @@ public class StartActivity : AppCompatActivity() {
     companion object{private val REQUEST_CODE = 100}
 
 
-    override fun onCreate(savedInstanceState: Bundle?, persistentState: PersistableBundle?) {
-        super.onCreate(savedInstanceState, persistentState)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_start)
         Log.d("My App", "StartActivity created")
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
@@ -56,12 +56,28 @@ public class StartActivity : AppCompatActivity() {
             Log.i("TESTING", "Permission granted!!")
             fusedLocationProviderClient?.getCurrentLocation(Priority.PRIORITY_HIGH_ACCURACY,null)
                 ?.addOnSuccessListener(OnSuccessListener<Location> { location ->
-                    val latitude = location.latitude
-                    val longitude = location.longitude
-                    val intent = Intent(this@StartActivity, MainActivity::class.java)
-                    intent.putExtra("latitude", latitude)
-                    intent.putExtra("longitude", longitude)
-                    startActivity(intent)
+                    if (location != null) {
+                        val latitude = location.latitude
+                        val longitude = location.longitude
+
+                        // Log the location
+                        Log.i("TESTING", "Got the location!!")
+                        Log.d("Location", "Latitude: $latitude, Longitude: $longitude")
+
+                        // Create an Intent to start the MainActivity
+                        val intent = Intent(this@StartActivity, MainActivity::class.java)
+
+                        // Include location data in the Intent
+                        intent.putExtra("latitude", latitude)
+                        intent.putExtra("longitude", longitude)
+
+                        // Start the MainActivity with the Intent
+                        startActivity(intent)
+
+                    } else {
+                        // Handle the case where location is null
+                        Log.e("TESTING", "Last known location is null")
+                    }
                 })
         } else {
             // Permission Denied - Ask the user for permission

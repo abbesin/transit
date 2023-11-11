@@ -1,6 +1,7 @@
 package com.example.transitapp
 
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -26,13 +27,16 @@ class MainActivity : AppCompatActivity() {
         val intent = intent
         val latitude = intent.getDoubleExtra("latitude", 0.0)
         val longitude = intent.getDoubleExtra("longitude", 0.0)
-        val currentLocation = "$latitude,$longitude"
+
+        //val currentLocation = "$latitude,$longitude"
+
+        // Log the location in MainActivity
+        Log.d("Location", "Latitude: $latitude, Longitude: $longitude")
 
         //Navigation set up - no need to make changes
-
         val navView: BottomNavigationView = binding.navView
-
         val navController = findNavController(R.id.nav_host_fragment_activity_main)
+
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         val appBarConfiguration = AppBarConfiguration(
