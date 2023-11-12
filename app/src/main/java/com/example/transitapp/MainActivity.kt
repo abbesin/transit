@@ -31,7 +31,7 @@ class MainActivity : AppCompatActivity() {
         //val currentLocation = "$latitude,$longitude"
 
         // Log the location in MainActivity
-        Log.d("Location", "Latitude: $latitude, Longitude: $longitude")
+        //Log.d("Location", "Latitude: $latitude, Longitude: $longitude")
 
         //Navigation set up - no need to make changes
         val navView: BottomNavigationView = binding.navView
