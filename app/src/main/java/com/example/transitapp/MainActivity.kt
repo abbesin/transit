@@ -9,10 +9,13 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.example.transitapp.databinding.ActivityMainBinding
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.mapbox.maps.MapView
 
+var mapView: MapView? = null
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -20,6 +23,8 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        //mapView = findViewById(R.id.mapView)
+        //mapView?.getMapboxMap()?.loadStyleUri(Style.MAPBOX_STREETS)
         // Get location from Start Activity Intent
         //setContentView(R.layout.activity_main);
 

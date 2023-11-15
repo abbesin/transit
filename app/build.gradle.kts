@@ -38,6 +38,7 @@ android {
     }
 }
 
+
 dependencies {
 
     implementation("androidx.core:core-ktx:1.9.0")
@@ -63,4 +64,7 @@ dependencies {
 
     // Location Services
     implementation("com.google.android.gms:play-services-location:21.0.1")
+
+    // Mapbox
+    implementation("com.mapbox.maps:android:10.16.2")
 }
