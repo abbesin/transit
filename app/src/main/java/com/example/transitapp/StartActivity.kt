@@ -5,7 +5,6 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Location
 import android.os.Bundle
-import android.os.PersistableBundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -14,6 +13,9 @@ import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.Priority
 import com.google.android.gms.tasks.OnSuccessListener
+import com.google.transit.realtime.GtfsRealtime.FeedMessage
+import java.net.URL
+
 
 public class StartActivity : AppCompatActivity() {
 
@@ -92,5 +94,19 @@ public class StartActivity : AppCompatActivity() {
             this, arrayOf<String>(Manifest.permission.ACCESS_FINE_LOCATION),
             StartActivity.REQUEST_CODE
         )
+    }
+
+    object GtfsRealtimeExample {
+        @Throws(Exception::class)
+        @JvmStatic
+        fun main() {
+            val url = URL("https://gtfs.halifax.ca/realtime/Vehicle/VehiclePositions.pb")
+            val feed = FeedMessage.parseFrom(url.openStream())
+            for (entity in feed.entityList) {
+                if (entity.hasTripUpdate()) {
+                    println(entity.tripUpdate)
+                }
+            }
+        }
     }
 }

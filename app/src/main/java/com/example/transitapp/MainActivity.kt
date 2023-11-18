@@ -9,34 +9,68 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.example.transitapp.databinding.ActivityMainBinding
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.transit.realtime.GtfsRealtime
 import com.mapbox.maps.MapView
+import com.mapbox.maps.Style
+import java.net.URL
 
-var mapView: MapView? = null
+
+class TransitBusDataStream : Runnable {
+
+    // Fetch GTFS data in a separate thread
+    override fun run() {
+        // URL for the Halifax GTFS Vehicle Position
+        val url = URL("https://gtfs.halifax.ca/realtime/Vehicle/VehiclePositions.pb")
+        val buses = mutableListOf<String>()
+        val feed: GtfsRealtime.FeedMessage = GtfsRealtime.FeedMessage.parseFrom(url.openStream())
+
+        // Iterate through vehicles in the feed
+        for (entity in feed.entityList) {
+            if (entity.hasVehicle()) {
+                val tripUpdate = entity.vehicle.trip
+                val position = entity.vehicle.position
+
+                //Extract Route ID, Latitude, Longitude)
+                val routeId = tripUpdate.routeId
+                val latitude = position.latitude
+                val longitude = position.longitude
+
+                // Log the bus information
+                Log.d("Bus Information","Route ID: $routeId, Latitude: $latitude, Longitude: $longitude")
+            }
+        }
+
+        // Handle the fetched buses as needed
+        Log.d("TransitBusDataStream", "Fetched buses: $buses")
+    }
+}
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivityMainBinding
+    var mapView: MapView? = null
 
+    private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        // Start fetching GTFS data on a new thread
+        val dataStream = Thread(TransitBusDataStream())
+        dataStream.start()
+
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        //mapView = findViewById(R.id.mapView)
-        //mapView?.getMapboxMap()?.loadStyleUri(Style.MAPBOX_STREETS)
-        // Get location from Start Activity Intent
-        //setContentView(R.layout.activity_main);
+        //Initialize the Mapview
+        mapView = findViewById(R.id.mapView)
+        mapView?.getMapboxMap()?.loadStyleUri("mapbox://styles/mapbox/streets-v11")
 
         // Get location from Start Activity Intent
         val intent = intent
         val latitude = intent.getDoubleExtra("latitude", 0.0)
         val longitude = intent.getDoubleExtra("longitude", 0.0)
 
-        //val currentLocation = "$latitude,$longitude"
-
         // Log the location in MainActivity
-        //Log.d("Location", "Latitude: $latitude, Longitude: $longitude")
+        Log.d("Location", "Latitude: $latitude, Longitude: $longitude")
 
         //Navigation set up - no need to make changes
         val navView: BottomNavigationView = binding.navView

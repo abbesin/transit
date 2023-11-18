@@ -67,4 +67,8 @@ dependencies {
 
     // Mapbox
     implementation("com.mapbox.maps:android:10.16.2")
+
+    // GTFS data
+    implementation("org.mobilitydata:gtfs-realtime-bindings:0.0.8")
+
 }
