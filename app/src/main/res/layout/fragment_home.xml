@@ -29,5 +29,20 @@
         app:layout_constraintTop_toTopOf="parent"
         app:mapbox_cameraTargetLat="44.6683"
         app:mapbox_cameraTargetLng="-63.6136"
-        app:mapbox_cameraZoom="11.0" />
+        app:mapbox_cameraZoom="13.0" />
+
+    <TextView
+        android:id="@+id/annotation"
+        android:layout_width="100dp"
+        android:layout_height="60dp"
+        android:background="@android:color/black"
+        android:gravity="center"
+        android:padding="3dp"
+        android:text="hello world"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/mapView"
+        app:layout_constraintStart_toStartOf="@+id/mapView"
+        app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

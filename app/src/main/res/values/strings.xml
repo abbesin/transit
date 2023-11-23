@@ -3,7 +3,15 @@
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
-
-
     <string name="mapbox_access_token">pk.eyJ1IjoidzA0NzI4MjYiLCJhIjoiY2xveXQyM3BkMDYyNjJrcGd3cmxpeHV2bCJ9.BtCyJCv11dsjVfNngm3nBQ</string>
+
+    <!-- Bus Route id -->
+    <string-array name="bus_route_ids">
+        <item>1</item>
+        <item>2</item>
+        <item>1A</item>
+        <item>2B</item>
+        <item>234</item>
+    </string-array>
+
 </resources>

@@ -17,6 +17,7 @@ import java.net.URL
 
 class TransitBusDataStream : Runnable {
 
+
     // Fetch GTFS data in a separate thread
     override fun run() {
         // URL for the Halifax GTFS Vehicle Position
@@ -35,6 +36,10 @@ class TransitBusDataStream : Runnable {
                 val latitude = position.latitude
                 val longitude = position.longitude
 
+//                // Add the bus to the list
+//                val bus = Bus(routeId, latitude, longitude)
+//                buses.add(bus)
+
                 // Log the bus information
                 Log.d("Bus Information","Route ID: $routeId, Latitude: $latitude, Longitude: $longitude")
             }
@@ -47,6 +52,14 @@ class TransitBusDataStream : Runnable {
 class MainActivity : AppCompatActivity() {
 
     var mapView: MapView? = null
+    data class Bus(
+        val routeId: String,
+        val latitude: Double,
+        val longitude: Double
+
+    )
+
+
 
     private lateinit var binding: ActivityMainBinding
 
@@ -72,6 +85,11 @@ class MainActivity : AppCompatActivity() {
         // Log the location in MainActivity
         Log.d("Location", "Latitude: $latitude, Longitude: $longitude")
 
+
+
+
+
+
         //Navigation set up - no need to make changes
         val navView: BottomNavigationView = binding.navView
         val navController = findNavController(R.id.nav_host_fragment_activity_main)
@@ -87,3 +105,4 @@ class MainActivity : AppCompatActivity() {
         navView.setupWithNavController(navController)
     }
 }
+
