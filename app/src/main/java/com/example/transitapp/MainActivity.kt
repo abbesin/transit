@@ -25,6 +25,7 @@ class TransitBusDataStream : Runnable {
         val buses = mutableListOf<String>()
         val feed: GtfsRealtime.FeedMessage = GtfsRealtime.FeedMessage.parseFrom(url.openStream())
 
+
         // Iterate through vehicles in the feed
         for (entity in feed.entityList) {
             if (entity.hasVehicle()) {
@@ -36,12 +37,13 @@ class TransitBusDataStream : Runnable {
                 val latitude = position.latitude
                 val longitude = position.longitude
 
-//                // Add the bus to the list
+                buses.add(entity.tripUpdate.trip.routeId)
+                // Add the bus to the list
 //                val bus = Bus(routeId, latitude, longitude)
 //                buses.add(bus)
 
                 // Log the bus information
-                Log.d("Bus Information","Route ID: $routeId, Latitude: $latitude, Longitude: $longitude")
+                //Log.d("Bus Information","Route ID: $routeId, Latitude: $latitude, Longitude: $longitude")
             }
         }
 
@@ -58,8 +60,6 @@ class MainActivity : AppCompatActivity() {
         val longitude: Double
 
     )
-
-
 
     private lateinit var binding: ActivityMainBinding
 
@@ -83,11 +83,7 @@ class MainActivity : AppCompatActivity() {
         val longitude = intent.getDoubleExtra("longitude", 0.0)
 
         // Log the location in MainActivity
-        Log.d("Location", "Latitude: $latitude, Longitude: $longitude")
-
-
-
-
+        Log.d("LocationMain", "Latitude: $latitude, Longitude: $longitude")
 
 
         //Navigation set up - no need to make changes

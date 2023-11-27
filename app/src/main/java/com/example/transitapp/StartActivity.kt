@@ -64,7 +64,7 @@ public class StartActivity : AppCompatActivity() {
 
                         // Log the location
                         Log.i("TESTING", "Got the location!!")
-                        Log.d("Location", "Latitude: $latitude, Longitude: $longitude")
+                        Log.d("LocationStart", "Latitude: $latitude, Longitude: $longitude")
 
                         // Create an Intent to start the MainActivity
                         val intent = Intent(this@StartActivity, MainActivity::class.java)

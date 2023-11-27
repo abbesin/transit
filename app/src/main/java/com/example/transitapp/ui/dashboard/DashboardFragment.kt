@@ -55,11 +55,10 @@ class DashboardFragment : Fragment() {
 
     private fun handleSelectedRoute(routeId: String) {
         // Implement the logic to handle the selected route.
-        // This could involve navigating to a new fragment, displaying information, etc.
-        // For now, you can log the selected route.
+        // Assume to navigate to map fragment, displaying information
+        // Log the selected route info.
         Log.d("SelectedRoute", "Route ID: $routeId")
     }
-
 
     override fun onDestroyView() {
         super.onDestroyView()
