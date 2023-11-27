@@ -87,14 +87,13 @@ class HomeFragment : Fragment() {
                     "Route ID: $routeId, Latitude: $latitude, Longitude: $longitude"
                 )
 
-                // Add a view Annotation for each bus to the map
-                addViewAnnotation(
-                    Point.fromLngLat(longitude.toDouble(), latitude.toDouble()),
-                    routeId.toString()
-                )
+                // Create a Point for the current latitude and longitude
+                val stop = Point.fromLngLat(longitude.toDouble(), latitude.toDouble())
+
+                // Add view annotation for the stop
+                addViewAnnotation(stop, routeId.toString())
             }
         }
-        Log.d("GTFS", "Finished reading GTFS data.")
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
