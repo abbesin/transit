@@ -42,7 +42,7 @@ class DashboardFragment : Fragment() {
         adapter.filter.filter(routeIds.toString())
 
         // Initialize search button
-        val searchButton = binding.buttonSearch
+        val searchButton = binding.buttonAdd
         searchButton.setOnClickListener {
             // Handle search button click
             val selectedRoute = autoCompleteTextView.text.toString()
