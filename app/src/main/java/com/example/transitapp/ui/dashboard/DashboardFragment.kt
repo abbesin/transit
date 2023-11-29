@@ -1,5 +1,6 @@
 package com.example.transitapp.ui.dashboard
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -12,6 +13,8 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.transitapp.R
 import com.example.transitapp.databinding.FragmentDashboardBinding
+import okio.IOException
+import java.io.FileOutputStream
 
 class DashboardFragment : Fragment() {
 
@@ -20,6 +23,7 @@ class DashboardFragment : Fragment() {
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
+    private lateinit var selectedRouteTextView: TextView
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -38,27 +42,45 @@ class DashboardFragment : Fragment() {
         autoCompleteTextView.setAdapter(adapter)
         autoCompleteTextView.threshold = 1
 
-        // Set a custom filter that is case-insensitive and matches anywhere in the string
+        // Set a custom filter
         adapter.filter.filter(routeIds.toString())
 
         // Initialize search button
-        val searchButton = binding.buttonAdd
-        searchButton.setOnClickListener {
-            // Handle search button click
+        val addButton = binding.buttonAdd
+        addButton.setOnClickListener {
+
+            // Get the selected route from AutoCompleteTextView
             val selectedRoute = autoCompleteTextView.text.toString()
-            // Implement logic to handle the selected route (e.g., navigate to a new fragment)
-            handleSelectedRoute(selectedRoute)
+
+            //val selectedRoute = autoCompleteTextView.text.toString()
+
+            // Get the currently displayed routes from TextView
+            val currentRoutes = selectedRouteTextView.text.toString()
+
+            // Update the TextView with the selected route
+            val updatedRoutes = if (currentRoutes.isNullOrEmpty()) selectedRoute else "$currentRoutes, $selectedRoute"
+            selectedRouteTextView.text = updatedRoutes
+
+            // Save the updated routes to internal storage
+            saveRoutesToInternalStorage(updatedRoutes)
+
+
         }
-//        binding.textDashboard.text="This is the dashboard fragment"
+
         return root
     }
 
-    private fun handleSelectedRoute(routeId: String) {
-        // Implement the logic to handle the selected route.
-        // Assume to navigate to map fragment, displaying information
-        // Log the selected route info.
-        Log.d("SelectedRoute", "Route ID: $routeId")
+    private fun saveRoutesToInternalStorage(routes: String) {
+        try {
+            val fileName = "saved_routes.txt"
+            val fileOutputStream: FileOutputStream = requireContext().openFileOutput(fileName, Context.MODE_PRIVATE)
+            fileOutputStream.write(routes.toByteArray())
+            fileOutputStream.close()
+        } catch (e: IOException) {
+            e.printStackTrace()
+        }
     }
+
 
     override fun onDestroyView() {
         super.onDestroyView()
