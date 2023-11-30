@@ -44,8 +44,6 @@ class NotificationsFragment : Fragment() {
                 val alert = entity.alert
                 val alertDescription = alert.getDescriptionText()?.toString() ?: ""
 
-
-
                 // Log the alert description
                 Log.d("AlertDescription", "Alert Description: $alertDescription")
 

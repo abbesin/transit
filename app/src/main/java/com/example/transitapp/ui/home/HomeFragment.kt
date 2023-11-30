@@ -26,6 +26,8 @@ import com.google.transit.realtime.GtfsRealtime
 import java.net.URL
 import com.example.transitapp.StartActivity
 import com.mapbox.maps.dsl.cameraOptions
+import java.util.Timer
+import java.util.TimerTask
 
 var mapView: MapView? = null
 class HomeFragment : Fragment() {
@@ -37,6 +39,9 @@ class HomeFragment : Fragment() {
     private val binding get() = _binding!!
     private lateinit var mapboxMap: MapboxMap
     private lateinit var viewAnnotationManager: ViewAnnotationManager
+
+    private lateinit var timer: Timer
+    private val refreshInterval: Long = 20000
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -101,9 +106,24 @@ class HomeFragment : Fragment() {
             }
         }
 
+        // Initialize the timer
+        timer = Timer()
+
+        // Schedule the timer task to refresh bus positions every 20 seconds
+        timer.scheduleAtFixedRate(object : TimerTask() {
+            override fun run() {
+                activity?.runOnUiThread {
+                    refreshBusPositions()
+                }
+            }
+        }, 0, refreshInterval)
+
         return root
     }
 
+    private fun refreshBusPositions(){
+
+    }
     private fun addViewAnnotation(point: Point, routeId: String) {
 
         // Define the view annotation
@@ -125,8 +145,13 @@ class HomeFragment : Fragment() {
 
     }
 
+
     override fun onDestroyView() {
         super.onDestroyView()
+
+        // Cancel the timer when the fragment is destroyed
+        timer.cancel()
+
         _binding = null
     }
 }

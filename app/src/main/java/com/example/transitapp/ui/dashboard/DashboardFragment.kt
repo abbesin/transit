@@ -2,6 +2,7 @@ package com.example.transitapp.ui.dashboard
 
 import android.content.Context
 import android.os.Bundle
+import android.text.TextUtils.replace
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -45,6 +46,8 @@ class DashboardFragment : Fragment() {
         // Set a custom filter
         adapter.filter.filter(routeIds.toString())
 
+        selectedRouteTextView = root.findViewById(R.id.selectedRouteTextView)
+
         // Initialize search button
         val addButton = binding.buttonAdd
         addButton.setOnClickListener {
@@ -52,35 +55,32 @@ class DashboardFragment : Fragment() {
             // Get the selected route from AutoCompleteTextView
             val selectedRoute = autoCompleteTextView.text.toString()
 
-            //val selectedRoute = autoCompleteTextView.text.toString()
-
             // Get the currently displayed routes from TextView
             val currentRoutes = selectedRouteTextView.text.toString()
 
             // Update the TextView with the selected route
-            val updatedRoutes = if (currentRoutes.isNullOrEmpty()) selectedRoute else "$currentRoutes, $selectedRoute"
+            val updatedRoutes = if (currentRoutes.isNullOrEmpty()) selectedRoute else "$currentRoutes\n$selectedRoute"
             selectedRouteTextView.text = updatedRoutes
 
             // Save the updated routes to internal storage
-            saveRoutesToInternalStorage(updatedRoutes)
-
-
+            saveRoutesToInternalStorage(updatedRoutes.replace("\n",", "))
         }
 
         return root
     }
 
     private fun saveRoutesToInternalStorage(routes: String) {
+
         try {
             val fileName = "saved_routes.txt"
             val fileOutputStream: FileOutputStream = requireContext().openFileOutput(fileName, Context.MODE_PRIVATE)
             fileOutputStream.write(routes.toByteArray())
             fileOutputStream.close()
+            Log.d("DashboardFragment", "Routes saved: $routes")
         } catch (e: IOException) {
             e.printStackTrace()
         }
     }
-
 
     override fun onDestroyView() {
         super.onDestroyView()
