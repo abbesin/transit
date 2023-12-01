@@ -44,12 +44,21 @@ class NotificationsFragment : Fragment() {
                 val alert = entity.alert
                 val alertDescription = alert.getDescriptionText()?.toString() ?: ""
 
+                //Format the alter description
+                val formattedAlertDescription = alertDescription
+                    .replace("\\r\\n", "  ")
+                    .replace("translation", "Alert")
+                    .replace("text", "Details")
+                    .replace("language", "Language")
+                    .replace("{", "**")
+                    .replace("}", "**")
+
                 // Log the alert description
-                Log.d("AlertDescription", "Alert Description: $alertDescription")
+                Log.d("AlertDescription", "Alert Description: $formattedAlertDescription")
 
                 // Create a TextView for the alert message
                 val textView = TextView(requireContext())
-                textView.text = alertDescription
+                textView.text = formattedAlertDescription
 
                 // Add the TextView to the ScrollView
                 linearLayout.addView(textView)

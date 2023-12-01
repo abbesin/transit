@@ -1,6 +1,7 @@
 package com.example.transitapp.ui.home
 
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import android.os.StrictMode
 import android.util.Log
@@ -26,6 +27,9 @@ import com.google.transit.realtime.GtfsRealtime
 import java.net.URL
 import com.example.transitapp.StartActivity
 import com.mapbox.maps.dsl.cameraOptions
+import okio.IOException
+import java.io.BufferedReader
+import java.io.InputStreamReader
 import java.util.Timer
 import java.util.TimerTask
 
@@ -41,7 +45,7 @@ class HomeFragment : Fragment() {
     private lateinit var viewAnnotationManager: ViewAnnotationManager
 
     private lateinit var timer: Timer
-    private val refreshInterval: Long = 20000
+    private val refreshInterval: Long = 20000 // 20 seconds
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -91,8 +95,6 @@ class HomeFragment : Fragment() {
                 val tripUpdate = entity.vehicle.trip
                 val position = entity.vehicle.position
 
-                // Log the entire entity to understand its structure
-                Log.d("GTFS", "Entity: $entity")
                 // Extract Route ID, Latitude, Longitude)
                 val routeId = tripUpdate.routeId
                 val latitude = position.latitude
@@ -123,8 +125,35 @@ class HomeFragment : Fragment() {
 
     private fun refreshBusPositions(){
 
+        // Fetch real-time data, remove existing annotations, and add new annotations
+        val url = URL("https://gtfs.halifax.ca/realtime/Vehicle/VehiclePositions.pb")
+        val feed: GtfsRealtime.FeedMessage = GtfsRealtime.FeedMessage.parseFrom(url.openStream())
+
+        // Remove existing annotations before adding updated ones
+        viewAnnotationManager.removeAllViewAnnotations()
+
+        // Iterate through vehicles in the feed
+        for (entity in feed.entityList) {
+            if (entity.hasVehicle()) {
+                val tripUpdate = entity.vehicle.trip
+                val position = entity.vehicle.position
+
+                // Extract Route ID, Latitude, Longitude)
+                val routeId = tripUpdate.routeId
+                val latitude = position.latitude
+                val longitude = position.longitude
+
+                // Create a Point for the current latitude and longitude
+                val busLocation = Point.fromLngLat(longitude.toDouble(), latitude.toDouble())
+
+                // Add view annotation for the bus
+                addViewAnnotation(busLocation, routeId.toString())
+            }
+        }
     }
     private fun addViewAnnotation(point: Point, routeId: String) {
+
+        val selectedRoutes = getSelectedRoutesFromStorage()
 
         // Define the view annotation
         val viewAnnotation = viewAnnotationManager.addViewAnnotation(
@@ -139,12 +168,29 @@ class HomeFragment : Fragment() {
         //Set the routeId as the text of the textView in annotation layout
         viewAnnotation.findViewById<TextView>(R.id.annotation).text = routeId
 
-        // Log to verify that the binding is happening
-        Log.d("AddAnnotation", "Binding view annotation for Route ID: $routeId")
+        if(selectedRoutes.contains(routeId)){
+            viewAnnotation.findViewById<TextView>(R.id.annotation).setBackgroundColor(Color.BLUE)
+        }
         AnnotationBinding.bind(viewAnnotation)
 
     }
 
+    private fun getSelectedRoutesFromStorage(): List<String> {
+
+        // Read the list of selected routes from the saved file
+        try {
+            val fileName = "saved_routes.txt"
+            val inputStream = requireContext().openFileInput(fileName)
+            val inputStreamReader = InputStreamReader(inputStream)
+            val bufferedReader = BufferedReader(inputStreamReader)
+            val routes = bufferedReader.readLine()
+            inputStream.close()
+            return routes?.split(", ") ?: emptyList()
+        } catch (e: IOException) {
+            e.printStackTrace()
+        }
+        return emptyList()
+    }
 
     override fun onDestroyView() {
         super.onDestroyView()

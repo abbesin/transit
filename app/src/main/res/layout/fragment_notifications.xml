@@ -22,7 +22,9 @@
                 android:id="@+id/textView1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
+                android:text="Read Before Your Journey"
+                android:textColor="@color/white"
+                android:textStyle="bold"
                 android:textSize="18sp"
                 android:paddingBottom="10dp"
                  />

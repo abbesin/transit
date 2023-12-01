@@ -48,7 +48,7 @@ class DashboardFragment : Fragment() {
 
         selectedRouteTextView = root.findViewById(R.id.selectedRouteTextView)
 
-        // Initialize search button
+        // Initialize add button
         val addButton = binding.buttonAdd
         addButton.setOnClickListener {
 
@@ -62,13 +62,25 @@ class DashboardFragment : Fragment() {
             val updatedRoutes = if (currentRoutes.isNullOrEmpty()) selectedRoute else "$currentRoutes\n$selectedRoute"
             selectedRouteTextView.text = updatedRoutes
 
+            // Clear the AutoCompleteTextView
+            autoCompleteTextView.text = null
+
             // Save the updated routes to internal storage
             saveRoutesToInternalStorage(updatedRoutes.replace("\n",", "))
         }
 
+        // Initialize clear button
+        val clearButton = binding.buttonClear
+        clearButton.setOnClickListener {
+
+            // Clear the selected routes
+            selectedRouteTextView.text = ""
+
+            // Clear routes from internal storage
+            saveRoutesToInternalStorage("")
+        }
         return root
     }
-
     private fun saveRoutesToInternalStorage(routes: String) {
 
         try {
