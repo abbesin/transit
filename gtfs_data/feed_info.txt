@@ -1,0 +1,2 @@
+feed_publisher_name,feed_publisher_url,feed_lang,feed_start_date,feed_end_date,feed_version
+Halifax Transit,http://www.halifax.ca/transit,en,20231120,20240225,Nov2023_v1_20231107
